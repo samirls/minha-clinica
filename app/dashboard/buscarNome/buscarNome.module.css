@@ -1,0 +1,15 @@
+.h2{
+  display: flex;
+  justify-content: center;
+  font-size: 1.6rem;
+  padding-bottom: 25px;
+  font-weight: bold;
+}
+.h4{
+  display: flex;
+  padding-left: 20px;
+  font-size: 1.1rem;
+  padding-bottom: 25px;
+  font-weight:400;
+}
+

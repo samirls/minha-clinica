@@ -1,0 +1,7 @@
+.h2{
+  display: flex;
+  justify-content: center;
+  font-size: 1.6rem;
+  padding-bottom: 25px;
+  font-weight: bold;
+}

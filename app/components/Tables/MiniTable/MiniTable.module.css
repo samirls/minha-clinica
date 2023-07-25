@@ -1,0 +1,11 @@
+.td{
+   font-weight: 700; 
+}
+.tdDiv{
+    color: rgb(147, 147, 147);
+    font-weight:400;
+    font-size: 0.8rem;
+}
+.hoveredRow:hover {
+    background-color: #e2f5ff;
+  }

@@ -1,95 +1,127 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import {
+  Flex,
+  Box,
+  FormControl,
+  FormLabel,
+  Input,
+  Stack,
+  useToast,
+  Link,
+  Button,
+  Heading,
+  Text,
+} from "@chakra-ui/react";
+import { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+  const [tokenJWT, setTokenJWT] = useState("");
+  const router = useRouter();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post(`http://localhost:8080/auth/login`, {
+        login,
+        password,
+      });
+
+      const getTokenFromBackend = response.data.token;
+      Cookies.set("token", getTokenFromBackend, { expires: 1 });
+      setTokenJWT(getTokenFromBackend);
+
+      toast({
+        title: "Login Realizado!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      router.push("/dashboard");
+    } catch (error) {
+      console.error(error);
+      setIsLoading(false);
+      toast({
+        title: "Erro",
+        description:
+          "Ocorreu um erro ao tentar efetuar o Login. Por favor, tente novamente.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+    
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    <Flex
+      minH={"100vh"}
+      align={"center"}
+      justify={"center"}
+      bgImage="url('https://images.pexels.com/photos/40568/medical-appointment-doctor-healthcare-40568.jpeg')"
+      bgSize="cover"
+      bgPosition="center"
+    >
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading fontSize={"4xl"}>Login</Heading>
+        </Stack>
+        <Box rounded={"lg"} bg={"blue.50"} boxShadow={"lg"} p={8}>
+          <Stack spacing={4}>
+            <FormControl id="login">
+              <FormLabel>Usuário</FormLabel>
+              <Input
+                type="text"
+                bg={"white"}
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
+                borderColor="gray.400"
+              />
+            </FormControl>
+            <FormControl id="password">
+              <FormLabel>Senha</FormLabel>
+              <Input
+                type="password"
+                bg={"white"}
+                borderColor="gray.400"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </FormControl>
+            <Stack spacing={10}>
+              <Stack
+                direction={{ base: "column", sm: "row" }}
+                align={"start"}
+                justify={"space-between"}
+              >
+                <Link color={"blue.400"}>Esqueceu a senha?</Link>
+              </Stack>
+              <Button
+                isLoading={isLoading}
+                loadingText="Conectando..."
+                bg={"blue"}
+                onClick={handleLogin}
+                color={"white"}
+                _hover={{
+                  bg: "blue.600",
+                }}
+              >
+                Login
+              </Button>
+            </Stack>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
+  );
 }
