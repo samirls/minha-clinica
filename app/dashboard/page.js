@@ -6,6 +6,7 @@ import { Box } from "@chakra-ui/react";
 import axios from "axios";
 
 function Page() {
+
   const [serverStatus, setServerStatus] = useState([]);
 
   async function fetchData() {
@@ -20,6 +21,8 @@ function Page() {
   useEffect(() => {
     fetchData();
   }, []);
+
+
 
   return (
     <Box>

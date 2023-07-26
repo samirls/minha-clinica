@@ -5,7 +5,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+
 function ConsultasAnteriores({ params }) {
+
   const token = Cookies.get("token");
   const [consultasAnteriores, setConsultasAnteriores] = useState([]);
 
@@ -45,7 +47,7 @@ function ConsultasAnteriores({ params }) {
   return (
     <Box>
       <Flex justifyContent="center">
-        <Heading as="h1" size="lg" noOfLines={1} pb={5}>
+        <Heading size="lg" noOfLines={1} pb={5}>
           Consultas Anteriores
         </Heading>
       </Flex>

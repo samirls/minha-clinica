@@ -1,4 +1,6 @@
-import React, {useState} from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   ChakraProvider,
   FormControl,
@@ -24,10 +26,19 @@ import { TfiWrite } from "react-icons/tfi";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import Link from "next/link";
 import ModalEditarProntuario from "../../Modals/ModalEditarProntuario";
+import ModalDeletarProntuario from "../../Modals/ModalDeletarProntuario";
 
 function ProntuarioTable({ prontuario, id, dinamicRefresh }) {
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isEditarProntuarioOpen,
+    onOpen: onEditarProntuarioOpen,
+    onClose: onEditarProntuarioClose,
+  } = useDisclosure();
+  const {
+    isOpen: isDeletarProntuarioOpen,
+    onOpen: onDeletarProntuarioOpen,
+    onClose: onDeletarProntuarioClose,
+  } = useDisclosure();
 
   return (
     <Box boxShadow="2xl" border="1px" borderColor="gray.200" borderRadius="20">
@@ -120,20 +131,22 @@ function ProntuarioTable({ prontuario, id, dinamicRefresh }) {
         justifyItems="center"
       >
         <Box>
-          <Button leftIcon={<MdOutlineEditLocationAlt />} colorScheme="yellow" onClick={onOpen}>
+          <Button
+            leftIcon={<MdOutlineEditLocationAlt />}
+            colorScheme="yellow"
+            onClick={onEditarProntuarioOpen}
+          >
             Editar Prontuário
           </Button>
-          <ModalEditarProntuario
-            isOpen={isOpen}
-            onClose={onClose}
-            prontuario={prontuario}
-            id={id}
-            dinamicRefresh={dinamicRefresh}
-          />
         </Box>
-        <Button leftIcon={<RiDeleteBin7Line />} colorScheme="red">
+        <Button
+          leftIcon={<RiDeleteBin7Line />}
+          colorScheme="red"
+          onClick={onDeletarProntuarioOpen}
+        >
           Deletar Prontuário e Consultas
         </Button>
+
         <Box>
           <Button
             justify-content="flex-end"
@@ -157,6 +170,18 @@ function ProntuarioTable({ prontuario, id, dinamicRefresh }) {
           </Button>
         </Box>
       </SimpleGrid>
+      <ModalEditarProntuario
+        isOpen={isEditarProntuarioOpen}
+        onClose={onEditarProntuarioClose}
+        prontuario={prontuario}
+        id={id}
+        dinamicRefresh={dinamicRefresh}
+      />
+      <ModalDeletarProntuario
+        isOpen={isDeletarProntuarioOpen}
+        onClose={onDeletarProntuarioClose}
+        id={id}
+      />
     </Box>
   );
 }

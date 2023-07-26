@@ -19,7 +19,9 @@ import ModalRegistrarConsulta from "@/app/components/Modals/ModalRegistrarConsul
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+
 function NovaConsulta({ params }) {
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const token = Cookies.get("token");
   const [prontuario, setProntuario] = useState("");

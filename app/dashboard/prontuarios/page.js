@@ -10,6 +10,7 @@ import axios from "axios";
 import MiniTable from "@/app/components/Tables/MiniTable/MiniTable";
 
 function Page() {
+
   const nomeDaPessoa = "FULANO DE TAL";
   const token = Cookies.get("token");
   const [prontuarios, setProntuarios] = useState([]);

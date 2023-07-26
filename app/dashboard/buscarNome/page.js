@@ -26,6 +26,7 @@ import axios from "axios";
 import { BsSearch } from "react-icons/bs";
 import { MdNotInterested } from "react-icons/md";
 
+
 const activeLabelStyles = {
   transform: "scale(0.85) translateY(-24px)",
 };
@@ -65,6 +66,7 @@ export const theme = extendTheme({
 });
 
 function Page() {
+
   const nomeDaPessoa = "FULANO DE TAL";
   const token = Cookies.get("token");
   const [prontuarios, setProntuarios] = useState([]);

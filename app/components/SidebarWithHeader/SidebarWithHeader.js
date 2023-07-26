@@ -1,9 +1,8 @@
 'use client'
 
-import React, { ReactNode } from 'react';
+import React from 'react';
 import {
   IconButton,
-  Avatar,
   Box,
   CloseButton,
   Flex,
@@ -16,31 +15,24 @@ import {
   DrawerContent,
   Text,
   useDisclosure,
-  BoxProps,
-  FlexProps,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
 import {
   FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
   FiMenu,
   FiChevronDown,
 } from 'react-icons/fi';
-import {HiOutlineUserGroup} from 'react-icons/hi'
-import { IconType } from 'react-icons';
-import { ReactText } from 'react';
-import {RiGroupLine, RiUser3Line, RiTeamLine, RiUserAddLine} from 'react-icons/ri'
+import {RiGroupLine, RiUser3Line, RiTeamLine, RiUserAddLine, RiLogoutBoxLine} from 'react-icons/ri'
 import Cookies from 'js-cookie';
 import jwt_decode from 'jwt-decode';
 import { useRouter } from "next/navigation";
 
+function logouFromLinkItems() {
+  Cookies.remove('token');
+}
 
 const LinkItems = [
   { name: 'Dashboard', icon: FiHome, navigate: "/dashboard" },
@@ -48,7 +40,10 @@ const LinkItems = [
   { name: 'Ultimos Prontuários', icon: RiTeamLine, navigate: "/dashboard/prontuarios" },
   { name: 'Buscar por Nome', icon: RiGroupLine, navigate: "/dashboard/buscarNome" },
   { name: 'Buscar por Id', icon: RiUser3Line },
+  { name: 'Sair', icon: RiLogoutBoxLine, action: logouFromLinkItems, navigate: "/" },
 ];
+
+
 
 function getUserInfoFromToken() {
     const jwtToken = Cookies.get('token');
@@ -117,7 +112,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} href={link.navigate} >
+        <NavItem key={link.name} icon={link.icon} href={link.navigate} action={link.action} >
           {link.name}
         </NavItem>
       ))}
@@ -126,9 +121,17 @@ const SidebarContent = ({ onClose, ...rest }) => {
 };
 
 
-const NavItem = ({ icon, href, children, ...rest }) => {
+const NavItem = ({ icon, href, children, action, ...rest }) => {
+
+  const router = useRouter();
+
+  function logout() {
+    Cookies.remove('token');
+    router.push("/");
+  }
+
   return (
-    <Link href={href}  style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link href={href} onClick={action}  style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"
@@ -140,6 +143,7 @@ const NavItem = ({ icon, href, children, ...rest }) => {
           bg: 'cyan.400',
           color: 'white',
         }}
+        
         {...rest}>
         {icon && (
           <Icon
@@ -158,12 +162,14 @@ const NavItem = ({ icon, href, children, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }) => {
-    const router = useRouter();
+    
 
-    function logout() {
-      Cookies.remove('token');
-      router.push("/");
-    }
+  const router = useRouter();
+
+  function logout() {
+    Cookies.remove('token');
+    router.push("/");
+  }
 
 
   return (
