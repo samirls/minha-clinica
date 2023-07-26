@@ -10,17 +10,33 @@ import {
   Heading,
   useToast,
   useDisclosure,
+  keyframes,
   SimpleGrid,
-  Textarea,
+  Text,
 } from "@chakra-ui/react";
 import { BsSend } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import ModalRegistrarConsulta from "@/app/components/Modals/ModalRegistrarConsulta";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
+import OnlineBall from "@/app/components/Other/OnlineBall";
 
 function NovaConsulta({ params }) {
+  const size = "96px";
+  const color = "teal";
+
+  const pulseRing = keyframes`
+	0% {
+    transform: scale(0.33);
+  }
+  40%,
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+	`;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const token = Cookies.get("token");
@@ -28,6 +44,8 @@ function NovaConsulta({ params }) {
   const [consultaText, setConsultaText] = useState("");
   const toast = useToast();
   const router = useRouter();
+  const [startTime, setStartTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
     const fetchProntuarios = async () => {
@@ -48,7 +66,33 @@ function NovaConsulta({ params }) {
     };
 
     fetchProntuarios();
+    setStartTime(Date.now());
+    return () => {
+      setElapsedTime(0);
+    };
   }, [token]);
+
+  useEffect(() => {
+    // Update the elapsed time every second
+    const timer = setInterval(() => {
+      if (startTime) {
+        const currentTime = Date.now();
+        const elapsedSeconds = Math.floor((currentTime - startTime) / 1000);
+        setElapsedTime(elapsedSeconds);
+      }
+    }, 1000);
+
+    // Clean up the timer when the component unmounts
+    return () => clearInterval(timer);
+  }, [startTime]);
+
+  const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${hours}h ${minutes}m ${remainingSeconds}s`;
+  };
 
   const handleRegistrarConsulta = async () => {
     try {
@@ -91,22 +135,72 @@ function NovaConsulta({ params }) {
         </Heading>
       </Flex>
       <Flex minWidth="max-content" flexDir="column" pt={5} pb={3}>
-        <Heading as="h2" size="md" noOfLines={1}>
+        <Text as="i" fontWeight={500} fontSize="2xl">
           {prontuario.nome}
-        </Heading>
-        <SimpleGrid columns={4} spacing={5}>
-          <Box>Id: {prontuario.id}</Box>
-          <Box>Nascimento: {prontuario.dataDeNascimento}</Box>
-          <Box>Tipo Sanguineo: {prontuario.tipoSanguineo}</Box>
-          <Box>Alergias: {prontuario.alergias}</Box>
+        </Text>
+        <SimpleGrid minChildWidth="300px" columns={4} spacing={1}>
+          <Box>
+            <Text as="span" fontWeight="bold">
+              Id:
+            </Text>{" "}
+            {prontuario.id}
+          </Box>
+          <Box>
+            <Text as="span" fontWeight="bold">
+              Nascimento:{" "}
+            </Text>
+            {prontuario.dataDeNascimento}
+          </Box>
+          <Box>
+            <Text as="span" fontWeight="bold">
+              Tipo Sanguineo:{" "}
+            </Text>
+            {prontuario.tipoSanguineo}
+          </Box>
+          <Box>
+            <Text as="span" fontWeight="bold">
+              Alergias:{" "}
+            </Text>
+            {prontuario.alergias}
+          </Box>
         </SimpleGrid>
+        <Box>
+          <Box
+            h="20px"
+            w="300px"
+          >
+            <Box
+              as="div"
+              position="absolute"
+              w={250}
+              h={250}
+              _before={{
+                content: "''",
+                position: "absolute",
+                display: "block",
+                width: "30%",
+                height: "30%",
+                boxSizing: "border-box",
+                marginLeft: "45%",
+                marginTop: "-9%",
+                borderRadius: "50%",
+                bgColor: color,
+                animation: `2.25s ${pulseRing} cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite`,
+              }}
+            >
+              <Text size="full" position="absolute" top={1}>
+                <Text as='span' fontWeight="bold">Duração: </Text>{formatTime(elapsedTime)}
+              </Text>
+            </Box>
+          </Box>
+        </Box>
       </Flex>
       <ReactQuill
         value={consultaText}
         onChange={setConsultaText}
         style={{ height: "50vh" }}
       />
-      <Flex justifyContent="center" pt={5}>
+      <Flex justifyContent="center" pt={50}>
         <Button rightIcon={<BsSend />} colorScheme="whatsapp" onClick={onOpen}>
           Registrar Consulta
         </Button>
@@ -121,3 +215,55 @@ function NovaConsulta({ params }) {
 }
 
 export default NovaConsulta;
+
+/* 'use client'
+
+import { Avatar, Box, Flex, keyframes } from '@chakra-ui/react'
+
+export default function AvatarWithRipple() {
+  const size = '96px'
+  const color = 'teal'
+
+  const pulseRing = keyframes`
+	0% {
+    transform: scale(0.33);
+  }
+  40%,
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+	`
+
+  return (
+    <Flex
+      justifyContent="center"
+      alignItems="center"
+      h="216px"
+      w="full"
+      overflow="hidden">
+      <Box
+        as="div"
+        position="relative"
+        w={size}
+        h={size}
+        _before={{
+          content: "''",
+          position: 'relative',
+          display: 'block',
+          width: '300%',
+          height: '300%',
+          boxSizing: 'border-box',
+          marginLeft: '-100%',
+          marginTop: '-100%',
+          borderRadius: '50%',
+          bgColor: color,
+          animation: `2.25s ${pulseRing} cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite`,
+        }}>
+        <Avatar src="https://i.pravatar.cc/300" size="full" position="absolute" top={0} />
+      </Box>
+    </Flex>
+  )
+} */
