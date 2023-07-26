@@ -10,6 +10,7 @@ function UserPage({ params }) {
 
   const token = Cookies.get("token");
   const [prontuario, setProntuario] = useState('');
+  const [hasDataChanged, setHasDataChanged] = useState(0);
 
   useEffect(() => {
     const fetchProntuarios = async () => {
@@ -28,13 +29,17 @@ function UserPage({ params }) {
     };
 
     fetchProntuarios();
-  }, [token]);
+  }, [token, hasDataChanged]);
+
+  const handleDataChange = () => {
+    setHasDataChanged(hasDataChanged + 1);
+  } 
 
 
   return (
     <div>
       <h2 className={styles.h2}>Detalhes do Prontuário</h2>
-      <ProntuarioTable prontuario={prontuario} id={params.id} />
+      <ProntuarioTable prontuario={prontuario} id={params.id} dinamicRefresh={handleDataChange} />
     </div>
   );
 }

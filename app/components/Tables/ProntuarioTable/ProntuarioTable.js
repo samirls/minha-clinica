@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   ChakraProvider,
   FormControl,
@@ -13,6 +13,7 @@ import {
   Input,
   extendTheme,
   Box,
+  useDisclosure,
   Button,
   Center,
   Spacer,
@@ -22,8 +23,12 @@ import { MdOutlineEditLocationAlt } from "react-icons/md";
 import { TfiWrite } from "react-icons/tfi";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import Link from "next/link";
+import ModalEditarProntuario from "../../Modals/ModalEditarProntuario";
 
-function ProntuarioTable({ prontuario, id }) {
+function ProntuarioTable({ prontuario, id, dinamicRefresh }) {
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Box boxShadow="2xl" border="1px" borderColor="gray.200" borderRadius="20">
       <Flex justifyContent="center" fontSize={25} fontWeight={500} pt={5}>
@@ -106,36 +111,50 @@ function ProntuarioTable({ prontuario, id }) {
         </Flex>
       </SimpleGrid>
       <hr />
-      <SimpleGrid columns={4} w="100%" p={5} gap={5} minChildWidth="240px" justifyItems="center">
+      <SimpleGrid
+        columns={4}
+        w="100%"
+        p={5}
+        gap={5}
+        minChildWidth="240px"
+        justifyItems="center"
+      >
         <Box>
-          <Button leftIcon={<MdOutlineEditLocationAlt />} colorScheme="yellow">
+          <Button leftIcon={<MdOutlineEditLocationAlt />} colorScheme="yellow" onClick={onOpen}>
             Editar Prontuário
           </Button>
+          <ModalEditarProntuario
+            isOpen={isOpen}
+            onClose={onClose}
+            prontuario={prontuario}
+            id={id}
+            dinamicRefresh={dinamicRefresh}
+          />
         </Box>
         <Button leftIcon={<RiDeleteBin7Line />} colorScheme="red">
           Deletar Prontuário e Consultas
         </Button>
         <Box>
-        <Button
-          justify-content="flex-end"
-          leftIcon={<TfiWrite />}
-          colorScheme="green"
-        >
-          <Link href={`/dashboard/prontuarios/${id}/ConsultasAnteriores`}>
-            Consultas Anteriores
-          </Link>
-        </Button>
+          <Button
+            justify-content="flex-end"
+            leftIcon={<TfiWrite />}
+            colorScheme="green"
+          >
+            <Link href={`/dashboard/prontuarios/${id}/ConsultasAnteriores`}>
+              Consultas Anteriores
+            </Link>
+          </Button>
         </Box>
         <Box>
-        <Button
-          justify-content="flex-end"
-          leftIcon={<TfiWrite />}
-          colorScheme="whatsapp"
-        >
-          <Link href={`/dashboard/prontuarios/${id}/novaConsulta`}>
-            Nova Consulta
-          </Link>
-        </Button>
+          <Button
+            justify-content="flex-end"
+            leftIcon={<TfiWrite />}
+            colorScheme="whatsapp"
+          >
+            <Link href={`/dashboard/prontuarios/${id}/novaConsulta`}>
+              Nova Consulta
+            </Link>
+          </Button>
         </Box>
       </SimpleGrid>
     </Box>

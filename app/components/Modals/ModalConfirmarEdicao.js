@@ -10,7 +10,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 
-function ModalLimparFormulario({ isOpen, onClose, onClearForm }) {
+function ModalConfirmarEdicao({ isOpen, onClose, onEditConfirm, dinamicRefresh }) {
 
 
   return (
@@ -18,22 +18,23 @@ function ModalLimparFormulario({ isOpen, onClose, onClearForm }) {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Limpar Formulário</ModalHeader>
+          <ModalHeader>Confirme a Edição de Prontuário</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Deseja limpar todos os dados do formulário?</ModalBody>
+          <ModalBody>Deseja realmente editar o Prontuário?</ModalBody>
 
           <ModalFooter>
             <Button colorScheme="gray" mr={3} onClick={onClose}>
               Cancelar
             </Button>
             <Button
-              colorScheme="red"
+              colorScheme="yellow"
               onClick={() => {
-                onClearForm();
-                onClose(); 
+                onEditConfirm();
+                onClose();
+                dinamicRefresh(); 
               }}
             >
-              Limpar
+              Confirmar Edição
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -42,4 +43,4 @@ function ModalLimparFormulario({ isOpen, onClose, onClearForm }) {
   );
 }
 
-export default ModalLimparFormulario;
+export default ModalConfirmarEdicao;
