@@ -18,8 +18,10 @@ import ModalConfirmarDeletarProntuario from "./ModalConfirmarDeletarProntuario";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
+import useStore from "@/app/stores/store";
 
-function ModalDeletarProntuario({ isOpen, onClose, id }) {
+function ModalDeletarProntuario({ isOpen, onClose }) {
+  const id = useStore((state) => state.id);
   const toast = useToast();
   const token = Cookies.get("token");
   const router = useRouter();

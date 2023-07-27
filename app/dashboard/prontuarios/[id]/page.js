@@ -5,8 +5,15 @@ import styles from './UserPage.module.css'
 import Cookies from "js-cookie";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import useStore from '@/app/stores/store';
 
 function UserPage({ params }) {
+
+  const setId = useStore((state) => state.setId);
+
+  useEffect(() => {
+    setId(params.id);
+  }, []);
 
   const token = Cookies.get("token");
   const [prontuario, setProntuario] = useState('');
@@ -39,7 +46,7 @@ function UserPage({ params }) {
   return (
     <div>
       <h2 className={styles.h2}>Detalhes do Prontuário</h2>
-      <ProntuarioTable prontuario={prontuario} id={params.id} dinamicRefresh={handleDataChange} />
+      <ProntuarioTable prontuario={prontuario} dinamicRefresh={handleDataChange} />
     </div>
   );
 }

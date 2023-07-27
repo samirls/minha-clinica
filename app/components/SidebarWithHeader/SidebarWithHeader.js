@@ -45,7 +45,7 @@ const LinkItems = [
 
 
 
-function getUserInfoFromToken() {
+/* function getUserInfoFromToken() {
     const jwtToken = Cookies.get('token');
     if (jwtToken) {
       const decodedToken = jwt_decode(jwtToken);
@@ -54,18 +54,18 @@ function getUserInfoFromToken() {
     return null;
   }
 
-const infoFromToken = getUserInfoFromToken();
+const infoFromToken = getUserInfoFromToken(); */
 
 
 
 
-export default function page({
+export default function Page({
   children,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('white', 'gray.900')}>
+    <Box minH="100vh" bg='white'>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
@@ -213,9 +213,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
                   alignItems="flex-start"
                   spacing="1px"
                   ml="2">
-                  <Text fontSize="sm">{infoFromToken.sub}</Text>
+                  <Text fontSize="sm">User</Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    Role
                   </Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>

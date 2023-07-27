@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import OnlineBall from "../components/Other/OnlineBall";
 import { Box } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -26,8 +25,8 @@ function Page() {
 
   return (
     <Box>
-      <OnlineBall />
-      <Box>{serverStatus.data}</Box>
+      
+      <Box>Resposta do servidor: {serverStatus.data}</Box>
     </Box>
   );
 }

@@ -22,22 +22,6 @@ import "react-quill/dist/quill.snow.css";
 import OnlineBall from "@/app/components/Other/OnlineBall";
 
 function NovaConsulta({ params }) {
-  const size = "96px";
-  const color = "teal";
-
-  const pulseRing = keyframes`
-	0% {
-    transform: scale(0.33);
-  }
-  40%,
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-	`;
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const token = Cookies.get("token");
   const [prontuario, setProntuario] = useState("");
@@ -165,40 +149,14 @@ function NovaConsulta({ params }) {
           </Box>
         </SimpleGrid>
         <Box>
-          <Box
-            h="20px"
-            w="300px"
-          >
-            <Box
-              as="div"
-              position="absolute"
-              w={250}
-              h={250}
-              _before={{
-                content: "''",
-                position: "absolute",
-                display: "block",
-                width: "30%",
-                height: "30%",
-                boxSizing: "border-box",
-                marginLeft: "45%",
-                marginTop: "-9%",
-                borderRadius: "50%",
-                bgColor: color,
-                animation: `2.25s ${pulseRing} cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite`,
-              }}
-            >
-              <Text size="full" position="absolute" top={1}>
-                <Text as='span' fontWeight="bold">Duração: </Text>{formatTime(elapsedTime)}
-              </Text>
-            </Box>
-          </Box>
+          <Text as='span' fontWeight="bold">Duração: </Text>
+          {formatTime(elapsedTime)}
         </Box>
       </Flex>
       <ReactQuill
         value={consultaText}
         onChange={setConsultaText}
-        style={{ height: "50vh" }}
+        style={{ height: "350px" }}
       />
       <Flex justifyContent="center" pt={50}>
         <Button rightIcon={<BsSend />} colorScheme="whatsapp" onClick={onOpen}>

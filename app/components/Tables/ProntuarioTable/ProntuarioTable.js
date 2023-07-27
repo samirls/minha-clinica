@@ -27,8 +27,12 @@ import { RiDeleteBin7Line } from "react-icons/ri";
 import Link from "next/link";
 import ModalEditarProntuario from "../../Modals/ModalEditarProntuario";
 import ModalDeletarProntuario from "../../Modals/ModalDeletarProntuario";
+import useStore from '@/app/stores/store'
 
-function ProntuarioTable({ prontuario, id, dinamicRefresh }) {
+function ProntuarioTable({ prontuario, dinamicRefresh }) {
+
+  const id = useStore((state) => state.id);
+
   const {
     isOpen: isEditarProntuarioOpen,
     onOpen: onEditarProntuarioOpen,
@@ -174,7 +178,6 @@ function ProntuarioTable({ prontuario, id, dinamicRefresh }) {
         isOpen={isEditarProntuarioOpen}
         onClose={onEditarProntuarioClose}
         prontuario={prontuario}
-        id={id}
         dinamicRefresh={dinamicRefresh}
       />
       <ModalDeletarProntuario

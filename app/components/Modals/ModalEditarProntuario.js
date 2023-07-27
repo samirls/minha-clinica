@@ -20,14 +20,15 @@ import {
 import ModalConfirmarEdicao from "./ModalConfirmarEdicao";
 import axios from "axios";
 import Cookies from "js-cookie";
+import useStore from "@/app/stores/store";
 
 function ModalEditarProntuario({
   isOpen,
   onClose,
   dinamicRefresh,
   prontuario,
-  id,
 }) {
+  const id = useStore((state) => state.id);
   const toast = useToast();
   const token = Cookies.get("token");
 
