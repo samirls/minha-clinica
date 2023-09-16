@@ -4,10 +4,11 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import {useStore} from "@/app/stores/store";
 
+function ConsultasAnteriores() {
 
-function ConsultasAnteriores({ params }) {
-
+  const id = useStore((state) => state.id);
   const token = Cookies.get("token");
   const [consultasAnteriores, setConsultasAnteriores] = useState([]);
 
@@ -15,7 +16,7 @@ function ConsultasAnteriores({ params }) {
     const fetchProntuarios = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/prontuario/${params.id}`,
+          `http://localhost:8080/prontuario/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

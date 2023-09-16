@@ -1,6 +1,6 @@
-'use client'
+"use client";
 
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import {
   IconButton,
   Box,
@@ -19,56 +19,58 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
+import { FiHome, FiMenu, FiChevronDown } from "react-icons/fi";
 import {
-  FiHome,
-  FiMenu,
-  FiChevronDown,
-} from 'react-icons/fi';
-import {RiGroupLine, RiUser3Line, RiTeamLine, RiUserAddLine, RiLogoutBoxLine} from 'react-icons/ri'
-import Cookies from 'js-cookie';
-import jwt_decode from 'jwt-decode';
+  RiGroupLine,
+  RiUser3Line,
+  RiTeamLine,
+  RiUserAddLine,
+  RiLogoutBoxLine,
+} from "react-icons/ri";
+import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 import { useRouter } from "next/navigation";
+import { useStore } from "@/app/stores/store";
 
 function logouFromLinkItems() {
-  Cookies.remove('token');
+  Cookies.remove("token");
 }
 
 const LinkItems = [
-  { name: 'Dashboard', icon: FiHome, navigate: "/dashboard" },
-  { name: 'Novo Prontuário', icon: RiUserAddLine, navigate: "/dashboard/novoProntuario" },
-  { name: 'Ultimos Prontuários', icon: RiTeamLine, navigate: "/dashboard/prontuarios" },
-  { name: 'Buscar por Nome', icon: RiGroupLine, navigate: "/dashboard/buscarNome" },
-  { name: 'Buscar por Id', icon: RiUser3Line },
-  { name: 'Sair', icon: RiLogoutBoxLine, action: logouFromLinkItems, navigate: "/" },
+  { name: "Dashboard", icon: FiHome, navigate: "/dashboard" },
+  {
+    name: "Novo Prontuário",
+    icon: RiUserAddLine,
+    navigate: "/dashboard/novoProntuario",
+  },
+  {
+    name: "Ultimos Prontuários",
+    icon: RiTeamLine,
+    navigate: "/dashboard/prontuarios",
+  },
+  {
+    name: "Buscar por Nome",
+    icon: RiGroupLine,
+    navigate: "/dashboard/buscarNome",
+  },
+  { name: "Buscar por Id", icon: RiUser3Line },
+  {
+    name: "Sair",
+    icon: RiLogoutBoxLine,
+    action: logouFromLinkItems,
+    navigate: "/",
+  },
 ];
 
-
-
-/* function getUserInfoFromToken() {
-    const jwtToken = Cookies.get('token');
-    if (jwtToken) {
-      const decodedToken = jwt_decode(jwtToken);
-      return decodedToken;
-    }
-    return null;
-  }
-
-const infoFromToken = getUserInfoFromToken(); */
-
-
-
-
-export default function Page({
-  children,
-}) {
+export default function Page({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg='white'>
+    <Box minH="100vh" bg="white">
       <SidebarContent
         onClose={() => onClose}
-        display={{ base: 'none', md: 'block' }}
+        display={{ base: "none", md: "block" }}
       />
       <Drawer
         autoFocus={false}
@@ -77,7 +79,8 @@ export default function Page({
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full">
+        size="full"
+      >
         <DrawerContent>
           <SidebarContent onClose={onClose} />
         </DrawerContent>
@@ -92,27 +95,30 @@ export default function Page({
 }
 
 const SidebarContent = ({ onClose, ...rest }) => {
-
-    const router = useRouter();
-
   return (
     <Box
       transition="3s ease"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue("white", "gray.900")}
       borderRight="1px"
-      borderRightColor={useColorModeValue('gray.300', 'gray.800')}
-      w={{ base: 'full', md: 60 }}
+      borderRightColor={useColorModeValue("gray.300", "gray.800")}
+      w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
-      {...rest}>
+      {...rest}
+    >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
           Minha Clínica
         </Text>
-        <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} href={link.navigate} action={link.action} >
+        <NavItem
+          key={link.name}
+          icon={link.icon}
+          href={link.navigate}
+          action={link.action}
+        >
           {link.name}
         </NavItem>
       ))}
@@ -120,18 +126,38 @@ const SidebarContent = ({ onClose, ...rest }) => {
   );
 };
 
-
 const NavItem = ({ icon, href, children, action, ...rest }) => {
-
   const router = useRouter();
+  const addTokenToStore = useStore((store) => store.setInfoFromToken);
+  const infoFromToken = useStore((store) => store.infoFromToken);
 
   function logout() {
-    Cookies.remove('token');
+    Cookies.remove("token");
     router.push("/");
   }
 
+  useEffect(() => {
+    function getUserInfoFromToken() {
+      const jwtToken = Cookies.get("token");
+      if (jwtToken) {
+        const decodedToken = jwt_decode(jwtToken);
+        if (typeof decodedToken === "object" && decodedToken !== null) {
+          addTokenToStore(decodedToken);
+        }
+      } else {
+        router.push("/");
+      }
+    }
+    getUserInfoFromToken();
+  }, []);
+
   return (
-    <Link href={href} onClick={action}  style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+    <Link
+      href={href}
+      onClick={action}
+      style={{ textDecoration: "none" }}
+      _focus={{ boxShadow: "none" }}
+    >
       <Flex
         align="center"
         p="4"
@@ -140,17 +166,17 @@ const NavItem = ({ icon, href, children, action, ...rest }) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: 'cyan.400',
-          color: 'white',
+          bg: "cyan.400",
+          color: "white",
         }}
-        
-        {...rest}>
+        {...rest}
+      >
         {icon && (
           <Icon
             mr="4"
             fontSize="22"
             _groupHover={{
-              color: 'white',
+              color: "white",
             }}
             as={icon}
           />
@@ -162,15 +188,13 @@ const NavItem = ({ icon, href, children, action, ...rest }) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }) => {
-    
-
   const router = useRouter();
+  const infoFromToken = useStore((store) => store.infoFromToken);
 
   function logout() {
-    Cookies.remove('token');
+    Cookies.remove("token");
     router.push("/");
   }
-
 
   return (
     <Flex
@@ -178,13 +202,14 @@ const MobileNav = ({ onOpen, ...rest }) => {
       px={{ base: 4, md: 4 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue('white', 'gray.900')}
+      bg={useColorModeValue("white", "gray.900")}
       borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.300', 'gray.800')}
-      justifyContent={{ base: 'space-between', md: 'flex-end' }}
-      {...rest}>
+      borderBottomColor={useColorModeValue("gray.300", "gray.800")}
+      justifyContent={{ base: "space-between", md: "flex-end" }}
+      {...rest}
+    >
       <IconButton
-        display={{ base: 'flex', md: 'none' }}
+        display={{ base: "flex", md: "none" }}
         onClick={onOpen}
         variant="outline"
         aria-label="open menu"
@@ -192,40 +217,43 @@ const MobileNav = ({ onOpen, ...rest }) => {
       />
 
       <Text
-        display={{ base: 'flex', md: 'none' }}
+        display={{ base: "flex", md: "none" }}
         fontSize="2xl"
         fontFamily="monospace"
-        fontWeight="bold">
+        fontWeight="bold"
+      >
         Minha Clínica
       </Text>
 
-      <HStack spacing={{ base: '0', md: '6' }}>
-        <Flex alignItems={'center'}>
+      <HStack spacing={{ base: "0", md: "6" }}>
+        <Flex alignItems={"center"}>
           <Menu>
             <MenuButton
               py={2}
               transition="all 0.3s"
-              _focus={{ boxShadow: 'none' }}>
+              _focus={{ boxShadow: "none" }}
+            >
               <HStack>
-
                 <VStack
-                  display={{ base: 'none', md: 'flex' }}
+                  display={{ base: "none", md: "flex" }}
                   alignItems="flex-start"
                   spacing="1px"
-                  ml="2">
-                  <Text fontSize="sm">User</Text>
+                  ml="2"
+                >
+                  <Text fontSize="sm">{infoFromToken?.sub?.toUpperCase()}</Text>
                   <Text fontSize="xs" color="gray.600">
                     Role
                   </Text>
                 </VStack>
-                <Box display={{ base: 'none', md: 'flex' }}>
+                <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
                 </Box>
               </HStack>
             </MenuButton>
             <MenuList
-              bg={useColorModeValue('white', 'gray.900')}
-              borderColor={useColorModeValue('gray.200', 'gray.700')}>
+              bg={useColorModeValue("white", "gray.900")}
+              borderColor={useColorModeValue("gray.200", "gray.700")}
+            >
               <MenuItem onClick={logout}>Sign out</MenuItem>
             </MenuList>
           </Menu>

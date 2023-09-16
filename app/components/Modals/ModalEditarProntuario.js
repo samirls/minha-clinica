@@ -20,7 +20,7 @@ import {
 import ModalConfirmarEdicao from "./ModalConfirmarEdicao";
 import axios from "axios";
 import Cookies from "js-cookie";
-import useStore from "@/app/stores/store";
+import {useStore} from "@/app/stores/store";
 
 function ModalEditarProntuario({
   isOpen,

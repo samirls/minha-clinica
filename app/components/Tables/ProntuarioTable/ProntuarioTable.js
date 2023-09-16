@@ -2,23 +2,12 @@
 
 import React, { useState } from "react";
 import {
-  ChakraProvider,
-  FormControl,
-  FormErrorMessage,
-  FormHelperFlex,
-  Select,
-  FormLabel,
-  useToast,
-  Grid,
   Flex,
   SimpleGrid,
-  Input,
-  extendTheme,
   Box,
   useDisclosure,
   Button,
-  Center,
-  Spacer,
+
 } from "@chakra-ui/react";
 import { TbReportOff } from "react-icons/tb";
 import { MdOutlineEditLocationAlt } from "react-icons/md";
@@ -27,7 +16,7 @@ import { RiDeleteBin7Line } from "react-icons/ri";
 import Link from "next/link";
 import ModalEditarProntuario from "../../Modals/ModalEditarProntuario";
 import ModalDeletarProntuario from "../../Modals/ModalDeletarProntuario";
-import useStore from '@/app/stores/store'
+import {useStore} from '@/app/stores/store'
 
 function ProntuarioTable({ prontuario, dinamicRefresh }) {
 

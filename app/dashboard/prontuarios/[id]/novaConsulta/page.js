@@ -10,7 +10,6 @@ import {
   Heading,
   useToast,
   useDisclosure,
-  keyframes,
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
@@ -19,9 +18,11 @@ import { useRouter } from "next/navigation";
 import ModalRegistrarConsulta from "@/app/components/Modals/ModalRegistrarConsulta";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import OnlineBall from "@/app/components/Other/OnlineBall";
+import 'animate.css';
+import {useStore} from "@/app/stores/store";
 
-function NovaConsulta({ params }) {
+function NovaConsulta() {
+  const id = useStore((state) => state.id);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const token = Cookies.get("token");
   const [prontuario, setProntuario] = useState("");
@@ -31,11 +32,12 @@ function NovaConsulta({ params }) {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
 
+
   useEffect(() => {
     const fetchProntuarios = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/prontuario/${params.id}`,
+          `http://localhost:8080/prontuario/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -81,7 +83,7 @@ function NovaConsulta({ params }) {
   const handleRegistrarConsulta = async () => {
     try {
       await axios.post(
-        `http://localhost:8080/prontuario/${params.id}/consulta`,
+        `http://localhost:8080/prontuario/${id}/consulta`,
         {
           descricao: consultaText,
         },
@@ -99,7 +101,7 @@ function NovaConsulta({ params }) {
         duration: 5000,
         isClosable: true,
       });
-      router.push(`/dashboard/prontuarios/${params.id}`);
+      router.push(`/dashboard/prontuarios/${id}`);
     } catch (error) {
       toast({
         title: "Erro",
@@ -148,12 +150,12 @@ function NovaConsulta({ params }) {
             {prontuario.alergias}
           </Box>
         </SimpleGrid>
-        <Box>
-          <Text as='span' fontWeight="bold">Duração: </Text>
+        <Box className="animate__animated animate__flash">
+          <Text  as='span' fontWeight="bold">Duração: </Text>
           {formatTime(elapsedTime)}
         </Box>
       </Flex>
-      <ReactQuill
+      <ReactQuill 
         value={consultaText}
         onChange={setConsultaText}
         style={{ height: "350px" }}
@@ -174,54 +176,3 @@ function NovaConsulta({ params }) {
 
 export default NovaConsulta;
 
-/* 'use client'
-
-import { Avatar, Box, Flex, keyframes } from '@chakra-ui/react'
-
-export default function AvatarWithRipple() {
-  const size = '96px'
-  const color = 'teal'
-
-  const pulseRing = keyframes`
-	0% {
-    transform: scale(0.33);
-  }
-  40%,
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-	`
-
-  return (
-    <Flex
-      justifyContent="center"
-      alignItems="center"
-      h="216px"
-      w="full"
-      overflow="hidden">
-      <Box
-        as="div"
-        position="relative"
-        w={size}
-        h={size}
-        _before={{
-          content: "''",
-          position: 'relative',
-          display: 'block',
-          width: '300%',
-          height: '300%',
-          boxSizing: 'border-box',
-          marginLeft: '-100%',
-          marginTop: '-100%',
-          borderRadius: '50%',
-          bgColor: color,
-          animation: `2.25s ${pulseRing} cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite`,
-        }}>
-        <Avatar src="https://i.pravatar.cc/300" size="full" position="absolute" top={0} />
-      </Box>
-    </Flex>
-  )
-} */

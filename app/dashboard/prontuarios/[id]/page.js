@@ -5,15 +5,15 @@ import styles from './UserPage.module.css'
 import Cookies from "js-cookie";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import useStore from '@/app/stores/store';
+import {useStore} from '@/app/stores/store';
 
 function UserPage({ params }) {
 
   const setId = useStore((state) => state.setId);
-
+  
   useEffect(() => {
     setId(params.id);
-  }, []);
+  }, [params.id]);
 
   const token = Cookies.get("token");
   const [prontuario, setProntuario] = useState('');
