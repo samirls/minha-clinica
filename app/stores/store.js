@@ -8,11 +8,21 @@ const store = (set) => ({
     set((store) => ({
       infoFromToken: newInfo,
     })),
-  prontuariosState: [],
+  prontuarios: [],
   setProntuarios: (data) =>
     set((store) => ({
-      prontuariosState: data,
+      prontuarios: data,
     })),
+  totalPages: null,
+  setTotalPages: (data) =>
+    set((store) => ({
+      totalPages: data,
+    })),
+  totalElements: null,
+  setTotalElements: (data) => 
+      set((store) => ({
+        totalElements: data,
+      }))
 });
 
 export const useStore = create(store);

@@ -323,10 +323,10 @@ function ModalEditarProntuario({
               Salvar Edição
             </Button>
             <ModalConfirmarEdicao
+              dinamicRefresh={dinamicRefresh}
               isOpen={isNestedModalOpen}
               onClose={handleCloseNestedModal}
               onEditConfirm={handleSubmit}
-              dinamicRefresh={dinamicRefresh}
             />
           </ModalFooter>
         </ModalContent>

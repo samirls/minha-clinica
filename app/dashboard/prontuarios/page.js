@@ -13,14 +13,15 @@ import { color } from "framer-motion";
 
 function Page() {
   const token = Cookies.get("token");
-  //const [prontuarios, setProntuarios] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState("");
-  const [totalElements, setTotalElements] = useState("");
   const infoFromToken = useStore((store) => store.infoFromToken);
-  const addProntuarios = useStore((store) => store.setProntuarios);
-  const prontuarios = useStore((store) => store.prontuariosState);
+  const setProntuarios = useStore((store) => store.setProntuarios);
+  const prontuarios = useStore((store) => store.prontuarios);
+  const setTotalPages = useStore((store) => store.setTotalPages);
+  const totalPages = useStore((store) => store.totalPages);
+  const setTotalElements = useStore ((store) => store.setTotalElements);
+  const totalElements = useStore ((store) => store.totalElements);
 
   useEffect(() => {
     const fetchProntuarios = async () => {
@@ -34,7 +35,7 @@ function Page() {
           },
         });
         const { content, totalPages, totalElements } = response.data;
-        addProntuarios(content);
+        setProntuarios(content);
         setTotalPages(totalPages);
         setTotalElements(totalElements);
       } catch (error) {
@@ -45,7 +46,7 @@ function Page() {
     fetchProntuarios();
   }, [token, currentPage]);
 
-  console.log(prontuarios)
+  console.log(totalPages)
 
 
   //Atualizar a página atual

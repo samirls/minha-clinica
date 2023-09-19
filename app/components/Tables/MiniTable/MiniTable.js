@@ -44,7 +44,7 @@ function MiniTable({ prontuarios }) {
             </Tr>
           </Thead>
           <Tbody>
-            {prontuarios.map((prontuario) => (
+            {prontuarios?.map((prontuario) => (
               <Tr key={prontuario.id} className={styles.hoveredRow}>
                 <Td className={styles.td}>
                   <Link href={`/dashboard/prontuarios/${prontuario.id}`}>
